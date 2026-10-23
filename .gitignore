@@ -1,0 +1,31 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# kate
+*.kate-swp
+
+# other
+eclipse
+run
+
+# development-only runtime jars (agent diagnostics toolkit)
+libs
+
+# log4j output of test runs started from the project root
+logs
