@@ -3,3 +3,19 @@
 
 // If you wish to use the default helper methods, uncomment the line below
 // apply from: 'gradle/scripts/helpers.gradle'
+
+// Writes the catalog's runnable examples (docs/methods) as one script for the development runtime.
+// The examples stay in the catalog only; the generated script is under run/, which Git ignores.
+tasks.register('exampleScript', JavaExec) {
+    group = 'zenworks'
+    description = 'Writes the catalog examples to run/scripts/zenworks-examples.zs'
+    dependsOn 'testClasses'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass.set('com.mahghuuuls.zenworks.docs.ExampleScriptGenerator')
+    args file('docs/methods').absolutePath, file('run/scripts/zenworks-examples.zs').absolutePath
+}
+
+// CraftTweaker reads scripts only at game start, so regenerate the examples before every launch.
+tasks.matching { it.name == 'runClient' || it.name == 'runServer' }.configureEach {
+    dependsOn 'exampleScript'
+}
