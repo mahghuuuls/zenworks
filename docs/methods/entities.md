@@ -4,7 +4,7 @@ Methods on any entity: finding players around it and turning it into a player.
 
 ## getPlayersInRadius
 
-**Status:** Unreleased (planned for 1.0.0)
+**Added in:** 1.0.0
 
 ```zenscript
 entity.getPlayersInRadius(radius as double) as crafttweaker.player.IPlayer[]
@@ -45,7 +45,6 @@ for radius in [5.0, 2.0] as double[] {
 - Result: convenience helper.
 - Existing alternative: `entity.world.getEntitiesInArea(start, end)` with two `crafttweaker.util.Position3f` corners, then a loop that keeps entities that are players and converts them, which needs `asPlayer` below because ZenScript cannot cast an entity to a player.
 - Benefit: one call instead of building a box, filtering, and converting; a true distance instead of a box; dead players left out; a checked radius.
-- Replaces: MahZenUtils `getNearbyPlayers(radius)` (which used a box and was only on living entities).
 
 **Example** (the player finds themself; a radius above 64 is wrong usage):
 
@@ -56,7 +55,7 @@ print("getPlayersInRadius 100.0 found " ~ target.getPlayersInRadius(100.0).lengt
 
 ## asPlayer
 
-**Status:** Unreleased (planned for 1.0.0)
+**Added in:** 1.0.0
 
 ```zenscript
 entity.asPlayer() as crafttweaker.player.IPlayer
@@ -87,17 +86,15 @@ print("asPlayer on a player: " ~ player.asPlayer().name);
 
 - Result: missing capability.
 - Checked: `entity instanceof crafttweaker.player.IPlayer` works, but the cast `entity as crafttweaker.player.IPlayer` does not compile (`Cannot cast ZenTypeNative: crafttweaker.entity.IEntity to ZenTypeNative: crafttweaker.player.IPlayer`), so without this method a script cannot use player methods on an entity it got from an event.
-- Replaces: MahZenUtils `asIPlayer()` (which also returned null for players on the client side; `asPlayer` works on both sides).
 
 ## CraftTweaker equivalents
 
-These needs are already met by CraftTweaker 4.1.20 itself, so Zenworks adds no method for them. Each entry shows the CraftTweaker way, which replaces a MahZenUtils method.
+These needs are already met by CraftTweaker 4.1.20 itself, so Zenworks adds no method for them. Each entry shows the CraftTweaker way.
 
 Existing-equivalent check for all entries below (2026-10-22, CraftTweaker 4.1.20.715, read in its source; also checked: LootTweaker, GameStages, BlockDropsTweaker, roidtweaker, wizardryspelltweaker, ctsetbonus, jawms-integrations from the target pack): result existing equivalent.
 
 ### getAttribute
 
-- **Replaces:** MahZenUtils `getAttributeValue(name, default)`.
 - **CraftTweaker way:** `entity.getAttribute(name)` on `IEntityLivingBase` returns a `crafttweaker.entity.AttributeInstance`, or `null` when the entity has no attribute of that name; its `attributeValue` is the value with all modifiers.
 - **Runs on:** both sides; the server's value is the one to trust.
 
@@ -110,7 +107,6 @@ print("unknown attribute: " ~ (isNull(unknown) ? "missing" : "" ~ unknown.attrib
 
 ### isSneaking
 
-- **Replaces:** MahZenUtils `PlayerUtils.isSneaking(player)`.
 - **CraftTweaker way:** the `isSneaking` getter on any `IEntity`.
 - **Runs on:** both sides.
 
@@ -120,7 +116,6 @@ print("isSneaking: " ~ player.isSneaking);
 
 ### isActiveItemStackBlocking
 
-- **Replaces:** MahZenUtils `isBlocking()`.
 - **CraftTweaker way:** `entity.isActiveItemStackBlocking()` on `IEntityLivingBase`: true once the entity has held up a blocking item, such as a shield, for about 5 ticks.
 - **Runs on:** both sides.
 
@@ -130,7 +125,6 @@ print("isActiveItemStackBlocking: " ~ player.isActiveItemStackBlocking());
 
 ### absorptionAmount
 
-- **Replaces:** MahZenUtils `getTrueAbsorptionAmount()`.
 - **CraftTweaker way:** the `absorptionAmount` getter on `IEntityLivingBase`: the extra hearts from absorption, in health points.
 - **Runs on:** both sides.
 
@@ -140,7 +134,6 @@ print("absorptionAmount: " ~ player.absorptionAmount);
 
 ### health
 
-- **Replaces:** MahZenUtils `getHealthPercentage()`.
 - **CraftTweaker way:** `entity.health / entity.maxHealth` on `IEntityLivingBase`, a value from 0 to 1. Forge keeps maximum health above 0, so the division is safe.
 - **Runs on:** both sides.
 
@@ -150,7 +143,6 @@ print("health " ~ player.health ~ " of " ~ player.maxHealth ~ " is " ~ (player.h
 
 ### attackEntityFrom
 
-- **Replaces:** MahZenUtils `dealCustomDamage(attacker, amount, type)`.
 - **CraftTweaker way:** `target.attackEntityFrom(crafttweaker.damage.IDamageSource.createEntityDamage(type, attacker), amount)` on any `IEntity`. It builds the same kind of damage source the old method built: a named damage type caused by the attacker. Returns true when the damage was dealt.
 - **Runs on:** call it on the server; on the client it deals no damage and returns false. Creative players take no damage.
 

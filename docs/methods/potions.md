@@ -8,7 +8,7 @@ Wrong usage writes one error to `crafttweaker.log`, which CraftTweaker also show
 
 ## addPotionEffectById
 
-**Status:** Unreleased (planned for 1.0.0)
+**Added in:** 1.0.0
 
 ```zenscript
 entity.addPotionEffectById(potionId as string, durationTicks as int, amplifier as int) as bool
@@ -49,7 +49,6 @@ if (isNull(haste)) {
   - A fixed potion: `entity.addPotionEffect(<potion:minecraft:haste>.makePotionEffect(200, 1));`
   - A potion chosen while the game runs: keep the choices as brackets in an array, `val buffs = [<potion:minecraft:speed>, <potion:minecraft:haste>] as crafttweaker.potions.IPotion[];`, and pick from it.
 - Benefit: the potion can come from a string, such as a config value, a list built elsewhere, or another mod's id that may not be installed, which brackets cannot express (a bracket is resolved when the script compiles, and CraftTweaker has no method that finds a potion by a string). It also refuses wrong values with a clear error, does nothing on the client side, and reports whether anything changed.
-- Replaces: MahZenUtils `applyPotionEffect(id, ticks, amplifier)`.
 
 **Example of wrong usage** (shows the error lines; each appears once per game session):
 
@@ -60,7 +59,7 @@ print("wrong amplifier returned " ~ player.addPotionEffectById("minecraft:haste"
 
 ## getPotionAmplifierById
 
-**Status:** Unreleased (planned for 1.0.0)
+**Added in:** 1.0.0
 
 ```zenscript
 entity.getPotionAmplifierById(potionId as string) as int
@@ -103,4 +102,3 @@ print("wrong id amplifier read returned " ~ player.getPotionAmplifierById("minec
 - Result: convenience helper.
 - Existing alternative: `val effect = entity.getActivePotionEffect(<potion:minecraft:absorption>);` then `isNull(effect)` and `effect.amplifier`.
 - Benefit: the potion can come from a string chosen while the game runs, and the absent case is one documented value instead of a null check.
-- Replaces: MahZenUtils `getPotionAmplifier(id)` (same `-1` for an absent effect).
